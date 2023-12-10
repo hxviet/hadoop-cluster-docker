@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Modified by Hoang Xuan Viet on 2023-12-10
+
 # N is the node number of hadoop cluster
 N=$1
 
@@ -22,7 +24,7 @@ echo ""
 
 echo -e "\nbuild docker hadoop image\n"
 
-# rebuild kiwenlau/hadoop image
-sudo docker build -t kiwenlau/hadoop:1.0 .
+# rebuild image
+sudo docker build -t hadoop .
 
 echo ""
