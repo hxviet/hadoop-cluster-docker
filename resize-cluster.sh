@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Modified by Hoang Xuan Viet on 2023-12-10
-
 # N is the node number of hadoop cluster
 N=$1
 
@@ -13,10 +11,10 @@ fi
 
 # change slaves file
 i=1
-rm config/slaves
+rm config/workers
 while [ $i -lt $N ]
 do
-	echo "hadoop-slave$i" >> config/slaves
+	echo "hadoop-slave$i" >> config/workers
 	((i++))
 done 
 

@@ -1,6 +1,3 @@
-# Modified by Hoang Xuan Viet on 2023-12-10
-
-
 FROM ubuntu:18.04
 
 
@@ -39,44 +36,29 @@ RUN mv /tmp/hadoop-env.sh $HADOOP_HOME/etc/hadoop/hadoop-env.sh && \
     mv /tmp/core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml && \
     mv /tmp/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
     mv /tmp/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
-    mv /tmp/slaves $HADOOP_HOME/etc/hadoop/slaves
-
-
-# create a non-root user `user1`
-
-RUN useradd -ms /bin/bash user1
-
-WORKDIR /home/user1
+    mv /tmp/workers $HADOOP_HOME/etc/hadoop/workers
 
 
 # create directories for hdfs namenode, datanode, and hadoop logs
 
 RUN mkdir -p /tmp/hadoop/dfs/name && \
     mkdir -p /tmp/hadoop/dfs/data && \
-    mkdir $HADOOP_HOME/logs && \
-    chmod -R a+w /tmp/hadoop && \
-    chmod -R a+w $HADOOP_HOME/logs
+    mkdir $HADOOP_HOME/logs
 
 
 # set up passphraseless ssh
 
-RUN mkdir -p home/user1/.ssh && \
-    ssh-keygen -t rsa -f home/user1/.ssh/id_rsa -P '' && \
-    cat home/user1/.ssh/id_rsa.pub >> home/user1/.ssh/authorized_keys && \
-    chmod 0600 home/user1/.ssh/authorized_keys && \
-    mv /tmp/ssh_config home/user1/.ssh/config
+RUN mkdir -p .ssh && \
+    ssh-keygen -t rsa -f .ssh/id_rsa -P '' && \
+    cat .ssh/id_rsa.pub >> .ssh/authorized_keys && \
+    chmod 0600 .ssh/authorized_keys && \
+    mv /tmp/ssh_config .ssh/config
+
 
 # add example MapReduce programs
 
-RUN mv /tmp/start-hadoop.sh /home/user1/start-hadoop.sh && \
-    mv /tmp/run-wordcount.sh /home/user1/run-wordcount.sh
-
-
-# format namenode as non-root user `user1`
-
-USER user1
-
-RUN $HADOOP_HOME/bin/hdfs namenode -format
+RUN mv /tmp/start-hadoop.sh start-hadoop.sh && \
+    mv /tmp/run-wordcount.sh run-wordcount.sh
 
 
 # start SSH service and open a bash shell

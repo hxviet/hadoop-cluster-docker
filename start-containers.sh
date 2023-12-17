@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Modified by Hoang Xuan Viet on 2023-12-10
-
 # the default node number is 3
 N=${1:-3}
 
@@ -14,12 +12,12 @@ fi
 echo "Starting hadoop-master container..."
 sudo docker run -itd \
                 --net=hadoop \
+				-p 9870:9870 \
                 -p 50070:50070 \
                 -p 8088:8088 \
                 --name hadoop-master \
                 --hostname hadoop-master \
                 hadoop
-
 
 # start new hadoop slave containers
 i=1
